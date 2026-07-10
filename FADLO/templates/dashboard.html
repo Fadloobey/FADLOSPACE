@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4" style="color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+        <i class="fas fa-chart-pie me-2" style="color: #22d3ee;"></i>{{ t.dashboard_title }}
+    </h2>
+
+    {% if is_admin %}
+    <div class="row g-4 mb-4">
+        <div class="col-md-3 col-6"><div class="stat-card"><h4>{{ total_projects }}</h4><p class="text-muted">{{ t.total_projects }}</p></div></div>
+        <div class="col-md-3 col-6"><div class="stat-card"><h4>{{ total_clients }}</h4><p class="text-muted">{{ t.total_clients }}</p></div></div>
+        <div class="col-md-3 col-6"><div class="stat-card"><h4>{{ total_team }}</h4><p class="text-muted">{{ t.total_members }}</p></div></div>
+        <div class="col-md-3 col-6"><div class="stat-card"><h4>{{ pending_tasks }}</h4><p class="text-muted">{{ t.pending }}</p></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card card-modern p-4">
+                <h5 style="color: #fff;">Task Status</h5>
+                <canvas id="taskChart" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-modern p-4">
+                <h5 style="color: #fff;">Team Performance</h5>
+                <ul class="list-unstyled">
+                    {% for p in performance %}
+                    <li class="d-flex justify-content-between py-2 border-bottom" style="border-color: rgba(255,255,255,0.1);">
+                        <span style="color: rgba(255,255,255,0.85);">{{ p.name }}</span>
+                        <span class="badge" style="background: #22d3ee; color: #0c4a6e;">{{ p.done }} tasks done</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Chart(document.getElementById('taskChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending','In Progress','Completed'],
+                    datasets: [{
+                        data: [{{ pending_tasks }}, 5, {{ total_tasks - pending_tasks - 5 }}],
+                        backgroundColor: ['#22d3ee', '#0ea5e9', '#3b82f6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { labels: { color: '#fff' } } }
+                }
+            });
+        });
+    </script>
+
+    {% else %}
+    <div class="card card-modern p-4">
+        <h5 style="color: #fff;">My Tasks</h5>
+        {% if my_tasks %}
+            <ul class="list-unstyled">
+            {% for task in my_tasks %}
+                <li class="d-flex justify-content-between align-items-center py-2 border-bottom" style="border-color: rgba(255,255,255,0.1);">
+                    <span style="color: rgba(255,255,255,0.85);">{{ task.title }}</span>
+                    <span class="badge {% if task.status == 'pending' %}" style="background: #22d3ee; color: #0c4a6e;"{% elif task.status == 'in_progress' %}" style="background: #0ea5e9; color: #fff;"{% else %}" style="background: #3b82f6; color: #fff;"{% endif %}>
+                        {{ task.status }}
+                    </span>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">No tasks assigned yet.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

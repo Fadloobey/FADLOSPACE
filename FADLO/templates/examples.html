@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4" style="color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+                <i class="fas fa-star me-2" style="color: #22d3ee;"></i>
+                {% if request.args.get('service') == 'ui' %}
+                    {{ t.service1 }} – {{ t.examples }}
+                {% elif request.args.get('service') == 'web' %}
+                    {{ t.service2 }} – {{ t.examples }}
+                {% elif request.args.get('service') == 'marketing' %}
+                    {{ t.service3 }} – {{ t.examples }}
+                {% else %}
+                    {{ t.examples_title }}
+                {% endif %}
+            </h2>
+
+            {% if projects %}
+            <div class="row g-4">
+                {% for project in projects %}
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                    <div class="card card-modern h-100 hover-lift">
+                        <div class="card-img-top" style="height:180px;background:{{ project.gradient }};display:flex;align-items:center;justify-content:center;font-size:3rem;color:#fff;">
+                            <i class="fas {{ project.icon }}"></i>
+                        </div>
+                        <div class="card-body">
+                            <!-- Use translation keys for titles and descriptions -->
+                            <h5 style="color: #fff;">
+                                {% if project.id == 1 %}{{ t.project_sbt_title }}
+                                {% elif project.id == 2 %}{{ t.project_impacto_title }}
+                                {% elif project.id == 7 %}{{ t.project_fadlo_title }}
+                                {% else %}{{ project.title }}{% endif %}
+                            </h5>
+                            <p class="text-muted">
+                                {% if project.id == 1 %}{{ t.project_sbt_desc }}
+                                {% elif project.id == 2 %}{{ t.project_impacto_desc }}
+                                {% elif project.id == 7 %}{{ t.project_fadlo_desc }}
+                                {% else %}{{ project.description }}{% endif %}
+                            </p>
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                {% for tag in project.tags %}
+                                <span class="badge" style="background: #0ea5e9;">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                            <span class="badge mt-2" style="background: #22d3ee; color: #0f172a;">
+                                <i class="fas fa-tag me-1"></i>
+                                {% if project.service == 'ui' %}{{ t.service1 }}
+                                {% elif project.service == 'web' %}{{ t.service2 }}
+                                {% elif project.service == 'marketing' %}{{ t.service3 }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="card-footer bg-transparent border-0" style="border-color: rgba(255,255,255,0.1);">
+                            {% if project.link and project.link != '#' %}
+                            <a href="{{ project.link }}" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-external-link-alt me-1"></i> {{ t.view_project }}</a>
+                            {% else %}
+                            <button class="btn btn-outline-light btn-sm" onclick="alert('{{ project.title }} – {{ t.coming_soon }}')">{{ t.view_project }}</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <p class="text-muted" style="font-size: 1.2rem;">{{ t.no_examples }}</p>
+                <a href="{{ url_for('examples') }}" class="btn btn-outline-light btn-sm">{{ t.view_all_examples }}</a>
+            </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="{{ url_for('home') }}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-arrow-left me-2"></i> {{ t.back_home }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

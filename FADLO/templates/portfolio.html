@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4" style="color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+                <i class="fas fa-briefcase me-2" style="color: #22d3ee;"></i>{{ t.portfolio_title }}
+            </h2>
+
+            <div class="row g-4">
+                <!-- Project 1: SBT ACADEMY -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card card-modern h-100 hover-lift">
+                        <div class="card-img-top" style="height:200px;background:linear-gradient(135deg,#0ea5e9 0%,#3b82f6 100%);display:flex;align-items:center;justify-content:center;font-size:3rem;color:#fff;">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 style="color: #fff;">{{ t.project_sbt_title }}</h5>
+                            <p class="text-muted">{{ t.project_sbt_desc }}</p>
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                <span class="badge" style="background: #0ea5e9;">Python</span>
+                                <span class="badge" style="background: #3b82f6;">Flask</span>
+                                <span class="badge" style="background: #22d3ee; color: #0c4a6e;">JavaScript</span>
+                                <span class="badge" style="background: #0284c7;">Bootstrap</span>
+                                <span class="badge" style="background: #0f172a;">SQLite</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0" style="border-color: rgba(255,255,255,0.1);">
+                            <a href="https://sbtacaedemy.pythonanywhere.com/" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-external-link-alt me-1"></i> {{ t.view_project }}</a>
+                            <button class="btn btn-outline-light btn-sm" onclick="alert('{{ t.project_sbt_desc }}')"><i class="fas fa-info-circle"></i> {{ t.details }}</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: IMPACTO -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card card-modern h-100 hover-lift">
+                        <div class="card-img-top" style="height:200px;background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%);display:flex;align-items:center;justify-content:center;font-size:3rem;color:#fff;">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 style="color: #fff;">{{ t.project_impacto_title }}</h5>
+                            <p class="text-muted">{{ t.project_impacto_desc }}</p>
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                <span class="badge" style="background: #0ea5e9;">Python</span>
+                                <span class="badge" style="background: #3b82f6;">Flask</span>
+                                <span class="badge" style="background: #22d3ee; color: #0c4a6e;">JavaScript</span>
+                                <span class="badge" style="background: #f59e0b; color: #0f172a;">Bootstrap</span>
+                                <span class="badge" style="background: #0f172a;">SQLite</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0" style="border-color: rgba(255,255,255,0.1);">
+                            <a href="https://impacto.pythonanywhere.com/login" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-external-link-alt me-1"></i> {{ t.view_project }}</a>
+                            <button class="btn btn-outline-light btn-sm" onclick="alert('{{ t.project_impacto_desc }}')"><i class="fas fa-info-circle"></i> {{ t.details }}</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: FADLO (NEW) -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card card-modern h-100 hover-lift">
+                        <div class="card-img-top" style="height:200px;background:linear-gradient(135deg,#0ea5e9 0%,#22d3ee 100%);display:flex;align-items:center;justify-content:center;font-size:3rem;color:#fff;">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="card-body">
+                            <h5 style="color: #fff;">{{ t.project_fadlo_title }}</h5>
+                            <p class="text-muted">{{ t.project_fadlo_desc }}</p>
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                <span class="badge" style="background: #0ea5e9;">Flask</span>
+                                <span class="badge" style="background: #3b82f6;">Python</span>
+                                <span class="badge" style="background: #22d3ee; color: #0c4a6e;">JavaScript</span>
+                                <span class="badge" style="background: #0284c7;">Bootstrap</span>
+                                <span class="badge" style="background: #0f172a;">SQLite</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0" style="border-color: rgba(255,255,255,0.1);">
+                            <a href="{{ url_for('home') }}" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-external-link-alt me-1"></i> {{ t.view_project }}</a>
+                            <button class="btn btn-outline-light btn-sm" onclick="alert('{{ t.project_fadlo_desc }}')"><i class="fas fa-info-circle"></i> {{ t.details }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

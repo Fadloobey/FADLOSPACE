@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{% if lang == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FADLO – {{ t.home }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" id="bootstrap-rtl">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=9">
+    <style>
+        .sidebar-toggle { display: inline-block; }
+        @media (min-width: 768px) { .sidebar-toggle { display: none; } }
+        .notification-item { padding: 0.75rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .notification-item .time { font-size: 0.75rem; opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div id="progress-bar"></div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" 
+                     alt="FADLO" 
+                     style="height: 40px; width: auto; margin-right: 10px;">
+                <span>FADLO</span>
+            </a>
+            <button class="sidebar-toggle d-md-none" type="button" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">{{ t.home }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('portfolio') }}">{{ t.portfolio }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('services') }}">{{ t.services }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('examples') }}">{{ t.examples }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">{{ t.about }}</a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    {% if username %}
+                    <div class="dropdown me-3">
+                        <a href="#" class="text-light position-relative notification-bell" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell fa-lg"></i>
+                            <span class="badge rounded-pill position-absolute" id="unreadBadge">{{ unread_count() }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown">
+                            <li><h6 class="dropdown-header">{{ t.notifications }}</h6></li>
+                            <li><div id="notificationList"></div></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center" href="#" id="markReadBtn">{{ t.mark_all_read }}</a></li>
+                        </ul>
+                    </div>
+                    <a href="{{ url_for('profile') }}" class="text-light me-3">
+                        <i class="fas fa-user-circle fa-lg"></i>
+                    </a>
+                    {% endif %}
+                    <div class="dropdown me-2">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe"></i> {{ t.language }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ url_for('set_lang', lang='ar') }}">العربية</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_lang', lang='en') }}">English</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_lang', lang='fr') }}">Français</a></li>
+                        </ul>
+                    </div>
+                    {% if username %}
+                        <span class="text-light me-2">{{ username }}</span>
+                        <a href="{{ url_for('logout') }}" class="btn btn-outline-light btn-sm">{{ t.logout }}</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-sm">{{ t.login }}</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            {% if username %}
+                <nav class="col-md-3 col-lg-2 d-md-block sidebar" id="sidebar">
+                    <div class="sidebar-brand">
+                        <h3><span>FAD</span>LO</h3>
+                        <small>{{ t.dashboard }}</small>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><i class="fas fa-tachometer-alt"></i> {{ t.dashboard }}</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'team' %}active{% endif %}" href="{{ url_for('team') }}"><i class="fas fa-users"></i> {{ t.team }}</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'tasks' %}active{% endif %}" href="{{ url_for('tasks') }}"><i class="fas fa-tasks"></i> {{ t.tasks }}</a></li>
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'messages' %}active{% endif %}" href="{{ url_for('messages') }}"><i class="fas fa-comment-dots"></i> {{ t.messages }}</a></li>
+                        {% if session.get('role') == 'admin' %}
+                            <li class="nav-item"><a class="nav-link {% if request.endpoint == 'clients' %}active{% endif %}" href="{{ url_for('clients') }}"><i class="fas fa-handshake"></i> {{ t.clients }}</a></li>
+                        {% endif %}
+                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'profile' %}active{% endif %}" href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i> {{ t.profile }}</a></li>
+                    </ul>
+                </nav>
+            {% endif %}
+
+            <main class="{% if username %}col-md-9 col-lg-10{% else %}col-12{% endif %} py-4">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <footer class="text-white-50 py-3 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0 small">{{ t.footer_text }}</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=9"></script>
+    <!-- Notification script (from base) moved to external, but we keep minimal here -->
+    <script>
+        // Notifications (kept from previous)
+        const badge = document.getElementById('unreadBadge');
+        const notifList = document.getElementById('notificationList');
+        const markReadBtn = document.getElementById('markReadBtn');
+
+        function loadNotifications() {
+            fetch('/api/notifications')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.length) {
+                        notifList.innerHTML = '<div class="text-center text-muted py-2">{{ t.no_notifications }}</div>';
+                        return;
+                    }
+                    let html = '';
+                    data.forEach(n => {
+                        html += `<div class="notification-item">
+                            <div><strong>${n.sender}</strong> ${n.is_team ? '(Team)' : ''}</div>
+                            <div>${n.content}</div>
+                            <div class="time">${n.timestamp}</div>
+                        </div>`;
+                    });
+                    notifList.innerHTML = html;
+                });
+        }
+
+        if (notifList) {
+            loadNotifications();
+            if (markReadBtn) {
+                markReadBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetch('/api/mark_read')
+                        .then(() => {
+                            badge.textContent = '0';
+                            loadNotifications();
+                        });
+                });
+            }
+            setInterval(() => {
+                fetch('/api/notifications')
+                    .then(res => res.json())
+                    .then(data => { badge.textContent = data.length; });
+            }, 30000);
+        }
+    </script>
+</body>
+</html>

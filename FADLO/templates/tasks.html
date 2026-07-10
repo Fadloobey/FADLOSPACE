@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <h2 style="color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.1);">{{ t.tasks }}</h2>
+    {% if is_admin %}
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addTaskModal">+ {{ t.new_task }}</button>
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table" style="color: rgba(255,255,255,0.85);">
+            <thead>
+                <tr><th>{{ t.title }}</th><th>{{ t.assign_task }}</th><th>{{ t.deadline }}</th><th>{{ t.status }}</th><th>{{ t.actions }}</th></tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{% if task.assigned_to %}{{ get_user(task.assigned_to).username }}{% else %}Unassigned{% endif %}</td>
+                    <td>{{ task.deadline.strftime('%Y-%m-%d') if task.deadline else '-' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('update_task_status', task_id=task.id) }}" style="display:inline;">
+                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                                <option value="pending" {% if task.status=='pending' %}selected{% endif %}>{{ t.pending }}</option>
+                                <option value="in_progress" {% if task.status=='in_progress' %}selected{% endif %}>{{ t.in_progress }}</option>
+                                <option value="completed" {% if task.status=='completed' %}selected{% endif %}>{{ t.completed }}</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>{% if is_admin %}<a href="{{ url_for('delete_task', task_id=task.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete?')"><i class="fas fa-trash"></i></a>{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Task Modal -->
+{% if is_admin %}
+<div class="modal fade" id="addTaskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ t.new_task }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                <div class="modal-body">
+                    <div class="mb-3"><label>{{ t.title }}</label><input type="text" name="title" class="form-control" required></div>
+                    <div class="mb-3"><label>{{ t.description }}</label><textarea name="description" class="form-control"></textarea></div>
+                    <div class="mb-3"><label>{{ t.assign_task }}</label>
+                        <select name="assigned_to" class="form-select">
+                            {% for m in members %}
+                            <option value="{{ m.id }}">{{ m.full_name or m.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3"><label>{{ t.deadline }}</label><input type="date" name="deadline" class="form-control"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">{{ t.assign_task }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

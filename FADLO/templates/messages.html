@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="card card-modern">
+        <div class="card-header" style="background: transparent; border-bottom: 1px solid rgba(255,255,255,0.15);">
+            <h5 class="mb-0" style="color: #fff;"><i class="fas fa-comment-dots me-2" style="color: #fdcb6e;"></i>{{ t.messages }}</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="row g-0">
+                <div class="col-md-4 border-end" style="border-color: rgba(255,255,255,0.15); max-height:500px;overflow-y:auto;">
+                    <div class="p-3">
+                        <h6 style="color: rgba(255,255,255,0.6);">{{ t.conversations }}</h6>
+                        <ul class="list-unstyled">
+                            <li class="py-2 px-3 rounded-3 conversation-item" data-receiver="" style="cursor:pointer;">
+                                <div class="d-flex align-items-center" style="color: rgba(255,255,255,0.8);">
+                                    <i class="fas fa-users fa-lg me-2" style="color: #fdcb6e;"></i>
+                                    <strong>{{ t.team_chat }}</strong>
+                                </div>
+                            </li>
+                            {% for member in members %}
+                            <li class="py-2 px-3 rounded-3 conversation-item" data-receiver="{{ member.id }}" style="cursor:pointer;">
+                                <div class="d-flex align-items-center" style="color: rgba(255,255,255,0.8);">
+                                    <img src="{{ member.avatar }}" class="rounded-circle me-2" width="32" height="32">
+                                    <strong>{{ member.full_name or member.username }}</strong>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-8" style="max-height:500px;display:flex;flex-direction:column;">
+                    <div id="chatMessages" class="p-3 overflow-auto" style="flex:1; background: rgba(255,255,255,0.05);">
+                        {% for msg in messages %}
+                            {% set sender = get_user(msg.sender_id) %}
+                            {% set receiver = get_user(msg.receiver_id) if msg.receiver_id else None %}
+                            <div class="message-bubble {% if msg.sender_id == session.user_id %}sent{% else %}received{% endif %}">
+                                <div class="fw-bold small">
+                                    {{ sender.full_name or sender.username }}
+                                    {% if receiver %}
+                                        <i class="fas fa-arrow-right mx-1"></i> {{ receiver.full_name or receiver.username }}
+                                    {% else %}
+                                        <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff;">{{ t.team_chat }}</span>
+                                    {% endif %}
+                                </div>
+                                <div>{{ msg.content }}</div>
+                                {% if msg.file_path %}
+                                <div class="file-attachment"><i class="fas fa-paperclip"></i> <a href="{{ msg.file_path }}" target="_blank" style="color: #fdcb6e;">{{ t.download }}</a></div>
+                                {% endif %}
+                                <div class="text-muted small mt-1">{{ msg.timestamp.strftime('%H:%M %d-%m-%Y') }}</div>
+                            </div>
+                        {% else %}
+                            <p class="text-muted text-center my-3">{{ t.no_messages }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="p-3 border-top" style="border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.03);">
+                        <form method="POST" enctype="multipart/form-data">
+                            <div class="row g-2 align-items-end">
+                                <div class="col-md-3">
+                                    <select name="receiver_id" class="form-select" id="receiverSelect" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                                        <option value="">{{ t.team_chat }}</option>
+                                        {% for member in members %}
+                                        <option value="{{ member.id }}">{{ member.full_name or member.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" name="content" class="form-control" placeholder="{{ t.type_message }}" required style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="file" name="file" class="form-control" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary w-100" type="submit"><i class="fas fa-paper-plane"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const chatDiv = document.getElementById('chatMessages');
+    if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight;
+    document.querySelectorAll('.conversation-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.getElementById('receiverSelect').value = this.dataset.receiver;
+        });
+    });
+</script>
+{% endblock %}

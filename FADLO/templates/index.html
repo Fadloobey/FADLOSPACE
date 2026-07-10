@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section py-5" style="background: var(--gradient-bg); background-attachment: fixed; border-radius: 0 0 40px 40px; margin-bottom: 3rem; position: relative; overflow: hidden;">
+    <div class="container position-relative" style="z-index: 2;">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-white" data-aos="fade-up">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" 
+                         alt="FADLO" 
+                         style="height: 60px; width: auto; margin-right: 15px;">
+                    <h1 class="display-1 fw-bold mb-0" style="letter-spacing: -0.03em; text-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+                        <span style="color: #22d3ee;">FAD</span>LO
+                    </h1>
+                </div>
+                <p class="lead mb-3" style="font-weight: 300; font-size: 1.5rem; text-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+                    <span id="typed-text" data-strings='["{{ t.welcome }}", "Your Digital Partner", "Built with ❤️"]'></span>
+                    <span class="typewriter-cursor"></span>
+                </p>
+                <p style="max-width: 500px; opacity: 0.85;">{{ t.intro }}</p>
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    <a href="{{ url_for('portfolio') }}" class="btn btn-primary btn-lg"><i class="fas fa-briefcase me-2"></i>{{ t.portfolio }}</a>
+                    <a href="{{ url_for('services') }}" class="btn btn-outline-light btn-lg"><i class="fas fa-cogs me-2"></i>{{ t.services }}</a>
+                </div>
+                <div class="mt-4 pt-3 border-top border-light border-opacity-25">
+                    <p class="small text-light opacity-75 mb-2">{{ t.access_portal }}</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm px-4"><i class="fas fa-user-shield me-1"></i> {{ t.admin_login }}</a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-sm px-4"><i class="fas fa-users me-1"></i> {{ t.team_login }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center" data-aos="fade-up" data-aos-delay="200">
+                <div style="font-size: 8rem; color: rgba(255,255,255,0.06);">
+                    <i class="fas fa-crown"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="position: absolute; top: -50px; right: -50px; width: 300px; height: 300px; background: rgba(34,211,238,0.06); border-radius: 50%; filter: blur(60px); animation: float 8s ease-in-out infinite;"></div>
+    <div style="position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; background: rgba(59,130,246,0.06); border-radius: 50%; filter: blur(80px); animation: float 10s ease-in-out infinite reverse;"></div>
+    <style>
+        @keyframes float {
+            0% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(30px,-20px) scale(1.1); }
+            100% { transform: translate(0,0) scale(1); }
+        }
+    </style>
+</div>
+
+<!-- Stats Counters -->
+<div class="container mb-5" data-aos="fade-up" data-aos-delay="100">
+    <div class="row g-4">
+        <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="100"><div class="stat-card"><h4 class="counter" data-target="50">0</h4><p>{{ t.stats_projects }}</p></div></div>
+        <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="200"><div class="stat-card"><h4 class="counter" data-target="30">0</h4><p>{{ t.stats_clients }}</p></div></div>
+        <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="300"><div class="stat-card"><h4 class="counter" data-target="5">0</h4><p>{{ t.stats_experience }}</p></div></div>
+        <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="400"><div class="stat-card"><h4 class="counter" data-target="100">0</h4><p>{% if lang == 'ar' %}عميل راض{% elif lang == 'fr' %}Clients satisfaits{% else %}Happy Clients{% endif %}</p></div></div>
+    </div>
+</div>
+
+<!-- Services Preview (clickable cards – fully translated) -->
+<div class="container mb-5">
+    <h2 class="text-center mb-4" data-aos="fade-up" style="font-weight: 700; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+        <span style="border-bottom: 4px solid #22d3ee; padding-bottom: 0.25rem;">{{ t.services_title }}</span>
+    </h2>
+    <div class="row g-4">
+        <div class="col-md-4" data-aos="flip-up" data-aos-delay="100">
+            <a href="{{ url_for('examples') }}?service=ui" class="text-decoration-none">
+                <div class="card card-modern text-center h-100 p-4 hover-lift service-card">
+                    <div class="card-body">
+                        <div style="font-size: 3rem; color: #22d3ee; margin-bottom: 1rem;"><i class="fas fa-paint-brush"></i></div>
+                        <h5 style="color: #fff;">{{ t.service1 }}</h5>
+                        <p class="text-muted">Crafting beautiful, user‑centered interfaces that delight.</p>
+                        <span class="badge" style="background: #22d3ee; color: #0f172a; font-size: 0.8rem;">
+                            <i class="fas fa-arrow-right me-1"></i> {{ t.view_examples }}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4" data-aos="flip-up" data-aos-delay="200">
+            <a href="{{ url_for('examples') }}?service=web" class="text-decoration-none">
+                <div class="card card-modern text-center h-100 p-4 hover-lift service-card">
+                    <div class="card-body">
+                        <div style="font-size: 3rem; color: #22d3ee; margin-bottom: 1rem;"><i class="fas fa-code"></i></div>
+                        <h5 style="color: #fff;">{{ t.service2 }}</h5>
+                        <p class="text-muted">Full‑stack development with Python, Flask, and modern JavaScript.</p>
+                        <span class="badge" style="background: #22d3ee; color: #0f172a; font-size: 0.8rem;">
+                            <i class="fas fa-arrow-right me-1"></i> {{ t.view_examples }}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4" data-aos="flip-up" data-aos-delay="300">
+            <a href="{{ url_for('examples') }}?service=marketing" class="text-decoration-none">
+                <div class="card card-modern text-center h-100 p-4 hover-lift service-card">
+                    <div class="card-body">
+                        <div style="font-size: 3rem; color: #22d3ee; margin-bottom: 1rem;"><i class="fas fa-chart-line"></i></div>
+                        <h5 style="color: #fff;">{{ t.service3 }}</h5>
+                        <p class="text-muted">Data‑driven strategies to grow your online presence.</p>
+                        <span class="badge" style="background: #22d3ee; color: #0f172a; font-size: 0.8rem;">
+                            <i class="fas fa-arrow-right me-1"></i> {{ t.view_examples }}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- My Work / Examples Section (fully translated) -->
+<div class="container mb-5">
+    <h2 class="text-center mb-4" data-aos="fade-up" style="font-weight: 700; color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+        <span style="border-bottom: 4px solid #22d3ee; padding-bottom: 0.25rem;">✨ {{ t.examples_title }}</span>
+    </h2>
+    <div class="row g-4">
+        <!-- Project 1: SBT ACADEMY -->
+        <div class="col-md-4" data-aos="fade-right" data-aos-delay="100">
+            <div class="card card-modern h-100 hover-lift">
+                <div class="card-img-top" style="height:180px;background:linear-gradient(135deg,#0ea5e9 0%,#3b82f6 100%);display:flex;align-items:center;justify-content:center;font-size:3rem;color:#fff;">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="card-body">
+                    <h5 style="color: #fff;">{{ t.project_sbt_title }}</h5>
+                    <p class="text-muted">{{ t.project_sbt_desc }}</p>
+                    <div class="d-flex flex-wrap gap-2 mt-2">
+                        <span class="badge" style="background: #0ea5e9;">Python</span>
+                        <span class="badge" style="background: #3b82f6;">Flask</span>
+                        <span class="badge" style="background: #22d3ee; color: #0c4a6e;">JS</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0" style="border-color: rgba(255,255,255,0.1);">
+                    <a href="https://sbtacaedemy.pythonanywhere.com/" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-external-link-alt me-1"></i> {{ t.view_project }}</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 2: IMPACTO -->
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="card card-modern h-100 hover-lift">
+                <div class="card-img-top" style="height:180px;background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%);display:flex;align-items:center;justify-content:center;font-size:3rem;color:#fff;">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="card-body">
+                    <h5 style="color: #fff;">{{ t.project_impacto_title }}</h5>
+                    <p class="text-muted">{{ t.project_impacto_desc }}</p>
+                    <div class="d-flex flex-wrap gap-2 mt-2">
+                        <span class="badge" style="background: #0ea5e9;">Python</span>
+                        <span class="badge" style="background: #3b82f6;">Flask</span>
+                        <span class="badge" style="background: #22d3ee; color: #0c4a6e;">JS</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0" style="border-color: rgba(255,255,255,0.1);">
+                    <a href="https://impacto.pythonanywhere.com/login" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-external-link-alt me-1"></i> {{ t.view_project }}</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 3: FADLO -->
+        <div class="col-md-4" data-aos="fade-left" data-aos-delay="300">
+            <div class="card card-modern h-100 hover-lift">
+                <div class="card-img-top" style="height:180px;background:linear-gradient(135deg,#0ea5e9 0%,#22d3ee 100%);display:flex;align-items:center;justify-content:center;font-size:3rem;color:#fff;">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="card-body">
+                    <h5 style="color: #fff;">{{ t.project_fadlo_title }}</h5>
+                    <p class="text-muted">{{ t.project_fadlo_desc }}</p>
+                    <div class="d-flex flex-wrap gap-2 mt-2">
+                        <span class="badge" style="background: #0ea5e9;">Flask</span>
+                        <span class="badge" style="background: #3b82f6;">Python</span>
+                        <span class="badge" style="background: #22d3ee; color: #0c4a6e;">JS</span>
+                        <span class="badge" style="background: #0284c7;">Bootstrap</span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0" style="border-color: rgba(255,255,255,0.1);">
+                    <a href="{{ url_for('home') }}" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-external-link-alt me-1"></i> {{ t.view_project }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ url_for('portfolio') }}" class="btn btn-primary btn-lg"><i class="fas fa-briefcase me-2"></i>{{ t.see_all_projects }}</a>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="container mb-5" data-aos="fade-up" data-aos-delay="400">
+    <div class="card card-modern p-5 text-center" style="background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); color: #fff; border-radius: var(--radius);">
+        <h3 class="mb-3">{% if lang == 'ar' %}هل أنت مستعد للانطلاق؟{% elif lang == 'fr' %}Prêt à démarrer ?{% else %}Ready to launch?{% endif %}</h3>
+        <p class="mb-4" style="opacity: 0.8;">{{ t.intro }}</p>
+        <div>
+            <a href="{{ url_for('portfolio') }}" class="btn btn-primary btn-lg me-2"><i class="fas fa-rocket me-2"></i>{{ t.portfolio }}</a>
+            <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg">{{ t.about }}</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .service-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .service-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: #22d3ee;
+        box-shadow: 0 20px 60px rgba(34, 211, 238, 0.2);
+    }
+    .service-card .badge {
+        transition: all 0.3s;
+    }
+    .service-card:hover .badge {
+        background: #0ea5e9 !important;
+        color: #fff !important;
+    }
+    .service-card:active {
+        transform: scale(0.98);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const counters = document.querySelectorAll('.counter');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.getAttribute('data-target'));
+                    let current = 0;
+                    const increment = Math.ceil(target / 80);
+                    const update = () => {
+                        current += increment;
+                        if (current >= target) {
+                            el.textContent = target;
+                            return;
+                        }
+                        el.textContent = current;
+                        setTimeout(update, 20);
+                    };
+                    update();
+                    observer.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(c => observer.observe(c));
+    });
+</script>
+{% endblock %}
