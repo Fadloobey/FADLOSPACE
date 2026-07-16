@@ -1,0 +1,14 @@
+# Generate the dependencies list for Render
+pip freeze > requirements.txt
+
+# Initialize git repository
+git init
+git add .
+git commit -m "Initial commit from phone"
+
+# Link your GitHub repository (replace with your actual GitHub link)
+git remote add origin https://github.com
+git branch -M main
+
+# Push your code to GitHub (Termux will ask for your GitHub username and Personal Access Token)
+git push -u origin main
